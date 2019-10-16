@@ -28,7 +28,7 @@ public class AuthUserEndpoint {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/login")
+    @RequestMapping(method = RequestMethod.POST, path = "login")
     public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
         String responseData = userService.login(userLoginDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
