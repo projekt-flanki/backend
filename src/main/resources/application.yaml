@@ -1,7 +1,10 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://flanki.database.windows.net:1433;database=flankiDB;user=flanki@flanki;password=PASSWORD_FLANKI;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    url: jdbc:sqlserver://flanki.database.windows.net:1433;database=flankiDB;user=flanki@flanki;password=FLANKI_PASSWORD;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
   jpa:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+app:
+  jwtSecret: jwtWorkerStatsSecretKey
+  jwtExpiration: 864000
