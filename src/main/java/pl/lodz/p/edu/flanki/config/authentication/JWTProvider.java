@@ -4,6 +4,7 @@ package pl.lodz.p.edu.flanki.config.authentication;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -44,9 +45,10 @@ public class JWTProvider {
                 .getBody().getSubject();
     }
 
-    public String generateJwtToken(Integer userId) {
+    public String generateJwtToken() {
+        UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .setSubject(userPrinciple.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
