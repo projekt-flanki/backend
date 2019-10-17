@@ -1,6 +1,17 @@
 pipeline {
   agent any
   stages {
+    stage('Set Build Name') {
+      steps {
+        script {
+          if (env.BRANCH_NAME.startsWith('PR')) {
+            currentBuild.displayName = "#${env.BUILD_NUMBER} - ${env.CHANGE_BRANCH}"
+          } else {
+            currentBuild.displayName = "#${env.BUILD_NUMBER} - ${env.BRANCH_NAME}"
+          }
+        }
+      }
+    }
     stage("Prepare build environment") {
        steps {
 			 /* Not relying on 'checkout scm' because it creates detached head.
