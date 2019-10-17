@@ -9,7 +9,7 @@ import pl.lodz.p.edu.flanki.services.UserService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserDataEndpoint {
 
     private UserService userService;
@@ -19,7 +19,7 @@ public class UserDataEndpoint {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "user/info")
+    @RequestMapping(method = RequestMethod.GET, path = "info")
     public ResponseEntity<?> getUserInfo() {
         UserInfoDto userInfo = userService.getUserInfo();
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
