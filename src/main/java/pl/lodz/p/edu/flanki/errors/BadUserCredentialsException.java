@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadUserCredentialsException extends RuntimeException {
-    public BadUserCredentialsException(String message) {
+    public BadUserCredentialsException(final String message) {
         super(message);
     }
 }

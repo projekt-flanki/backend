@@ -19,26 +19,26 @@ public class JWTProvider {
     @Value("${app.jwtExpiration}")
     private int jwtExpiration;
 
-    public boolean validateJwtToken(String authToken) {
+    boolean validateJwtToken(final String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
+        } catch (final SignatureException e) {
             log.error("Invalid JWT signature -> Message: {} ", e);
-        } catch (MalformedJwtException e) {
+        } catch (final MalformedJwtException e) {
             log.error("Invalid JWT token -> Message: {}", e);
-        } catch (ExpiredJwtException e) {
+        } catch (final ExpiredJwtException e) {
             log.error("Expired JWT token -> Message: {}", e);
-        } catch (UnsupportedJwtException e) {
+        } catch (final UnsupportedJwtException e) {
             log.error("Unsupported JWT token -> Message: {}", e);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             log.error("JWT claims string is empty -> Message: {}", e);
         }
 
         return false;
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    String getUserNameFromJwtToken(final String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -46,7 +46,7 @@ public class JWTProvider {
     }
 
     public String generateJwtToken() {
-        UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return Jwts.builder()
                 .setSubject(userPrinciple.getEmail())
                 .setIssuedAt(new Date())

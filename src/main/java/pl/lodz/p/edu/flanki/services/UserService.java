@@ -15,11 +15,10 @@ import pl.lodz.p.edu.flanki.dtos.UserLoginDto;
 import pl.lodz.p.edu.flanki.dtos.UserRegisterDto;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.enums.UserRole;
-import pl.lodz.p.edu.flanki.errors.BadJwtTokenException;
 import pl.lodz.p.edu.flanki.errors.BadUserCredentialsException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
+import pl.lodz.p.edu.flanki.errors.UserNotExistException;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
-
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -28,41 +27,44 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private AuthenticationManager authenticationManager;
-    private JWTProvider jwtProvider;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JWTProvider jwtProvider;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTProvider jwtProvider) {
+    public UserService(final UserRepository userRepository,
+                       final PasswordEncoder passwordEncoder,
+                       final AuthenticationManager authenticationManager,
+                       final JWTProvider jwtProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
     }
 
-    public String login(UserLoginDto userLoginDto) {
+    public String login(final UserLoginDto userLoginDto) {
 
-        Authentication authentication = authenticationManager.authenticate(
+        final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userLoginDto.getEmail(),
                         userLoginDto.getPassword()
                 ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        Optional<User> username = userRepository.findByEmail(userLoginDto.getEmail());
+        final Optional<User> username = Optional.ofNullable(userRepository.findByEmail(userLoginDto.getEmail()));
 
         if (username.isPresent()) {
-            log.info("authorizeded user " + username.get().getEmail());
+            log.info("authorized user " + username.get().getEmail());
         } else throw new BadUserCredentialsException("Niepoprawne dane logowania");
 
         return jwtProvider.generateJwtToken();
     }
 
-    public void register(UserRegisterDto userRegisterDto) {
+    public void register(final UserRegisterDto userRegisterDto) {
 
         checkEmailValidity(userRegisterDto.getEmail());
-        User user = User.builder()
+        final User user = User.builder()
                 .email(userRegisterDto.getEmail())
                 .username(userRegisterDto.getName())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
@@ -71,27 +73,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void checkEmailValidity(String email) {
-        Optional<User> checkUser = userRepository.findByEmail(email);
+    private void checkEmailValidity(final String email) {
+
+        final Optional<User> checkUser = Optional.ofNullable(userRepository.findByEmail(email));
 
         if (checkUser.isPresent()) {
             throw new UserAlreadyRegisteredException("Użytkownik o podanym e-mail już istnieje.");
         }
     }
 
-    public UserInfoDto getUserInfo() {
-
-        UserPrinciple userPrinciple = (UserPrinciple)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<User> optionalUser = userRepository.findByEmail(userPrinciple.getEmail());
-
-        if(!optionalUser.isPresent()){
-            throw new BadJwtTokenException("Niepoprawny token");
-        } else {
-            User user = optionalUser.get();
-            return UserInfoDto.builder()
-                    .email(user.getEmail())
-                    .username(user.getUsername())
-                    .build();
-        }
+    public User getUser() {
+        final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return Optional.ofNullable(userRepository.findByEmail(userPrinciple.getEmail())).orElseThrow(() ->
+                new UserNotExistException("Użytkownik nie istnieje."));
     }
+
 }

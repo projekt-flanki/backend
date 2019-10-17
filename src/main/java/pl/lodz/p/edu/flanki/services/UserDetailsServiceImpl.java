@@ -8,21 +8,22 @@ import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.config.authentication.UserPrinciple;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
+import java.util.Optional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) {
 
-        User user = userRepository.findByEmail(email)
+        final User user = Optional.ofNullable(userRepository.findByEmail(email))
                 .orElseThrow(() ->
                         new UsernameNotFoundException("user not found with -> username or email : " + email)
                 );
