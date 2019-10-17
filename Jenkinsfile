@@ -27,13 +27,10 @@ pipeline {
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
           sh "git fetch"
-			 script { 
-			 	branchName = env.BRANCH_NAME
-			 	if(env.CHANGE_BRANCH != null){
-					branchName = env.CHANGE_BRANCH
-				}
+			 when {
+			 	expression { env.CHANGE_BRANCH != null }
 			 }
-          sh "git checkout ${branchName}"
+          sh "git checkout ${env.BRANCH_NAME}"
           sh "git pull --ff-only"
        }
     }
