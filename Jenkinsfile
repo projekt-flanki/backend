@@ -24,9 +24,9 @@ pipeline {
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
           sh "export IS_PR=`echo $env.BRANCH_NAME | grep -o PR- | wc -l`"
-          sh "export BRANCH_NAME=`if [ ${IS_PR} -eq 0 ]; then echo $env.BRANCH_NAME; else echo $env.CHANGE_BRANCH; fi`"
-			 sh "echo ${BRANCH_NAME}"
-          sh "git checkout ${BRANCH_NAME}"
+          sh "export BRANCH_NAME=`if [ ${env.IS_PR} -eq 0 ]; then echo $env.BRANCH_NAME; else echo $env.CHANGE_BRANCH; fi`"
+			 sh "echo ${env.BRANCH_NAME}"
+          sh "git checkout ${env.BRANCH_NAME}"
           sh "git pull --ff-only"
        }
     }
