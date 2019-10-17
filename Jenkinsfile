@@ -27,6 +27,7 @@ pipeline {
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
           sh "echo ${env.BRANCH_NAME}"
+			 sh "echo ${env.CHANGE_BRANCH}"
           sh "git checkout ${env.BRANCH_NAME}"
           sh "git pull --ff-only"
        }
