@@ -1,3 +1,5 @@
+def pull_request = env.CHANGE_BRANCH != null
+
 pipeline {
   agent any
   stages {
@@ -16,6 +18,9 @@ pipeline {
       }
     }
     stage("Prepare build environment") {
+		 when {
+		 	expression { pull_request == false }
+		 }
        steps {
 			 /* Not relying on 'checkout scm' because it creates detached head.
              For release plugin we must work on actual branch (he makes commit).
@@ -26,13 +31,26 @@ pipeline {
 			 checkout scm
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
-			 script { 
-			 	branchName = env.BRANCH_NAME
-			 	if(env.CHANGE_BRANCH != null){
-					branchName = env.CHANGE_BRANCH
-				}
-			 }
-          sh "git checkout ${branchName}"
+          sh "git fetch"
+          sh "git checkout ${env.BRANCH_NAME}"
+          sh "git pull --ff-only"
+       }
+    }
+    stage("Prepare build environment for pull request") {
+		 when {
+		 	expression { pull_request == true }
+		 }
+       steps {
+			 /* Not relying on 'checkout scm' because it creates detached head.
+             For release plugin we must work on actual branch (he makes commit).
+             So it is better to checkout/pull now rather than before release - to be sure we
+             make release commit for same sources that were used to make build.
+          */
+          cleanWs()
+			 checkout scm
+			 sh "git config --global user.name flanki-jenkins"
+          sh "git config --global user.email jenkins@proszowski.eu"
+          sh "git fetch"
           sh "git pull --ff-only"
        }
     }
