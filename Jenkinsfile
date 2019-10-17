@@ -23,7 +23,10 @@ pipeline {
 			 checkout scm
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
-          sh "git checkout $env.BRANCH_NAME"
+          sh "export IS_PR=$(echo $env.BRANCH_NAME | grep -o PR- | wc -c)"
+          sh "export BRANCH_NAME=$(echo $env.BRANCH_NAME | grep -o PR- | wc -c)"
+          sh "export BRANCH_NAME=$(if [ $BRANCH_NAME -eq 0 ]; then echo $env.BRANCH_NAME; else echo $env.CHANGE_BRANCH; fi)"
+          sh "git checkout $BRANCH_NAME"
           sh "git pull --ff-only"
        }
     }
