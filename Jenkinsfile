@@ -6,6 +6,9 @@ pipeline {
         script {
           if (env.BRANCH_NAME.startsWith('PR')) {
             currentBuild.displayName = "#${env.BUILD_NUMBER} - ${env.CHANGE_BRANCH}"
+				environment {
+					BRANCH_NAME = $CHANGE_BRANCH
+				}
           } else {
             currentBuild.displayName = "#${env.BUILD_NUMBER} - ${env.BRANCH_NAME}"
           }
@@ -23,6 +26,7 @@ pipeline {
 			 checkout scm
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
+          sh "echo ${env.BRANCH_NAME}"
           sh "git checkout ${env.BRANCH_NAME}"
           sh "git pull --ff-only"
        }
