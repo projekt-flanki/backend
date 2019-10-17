@@ -26,6 +26,7 @@ pipeline {
 			 checkout scm
 			 sh "git config --global user.name flanki-jenkins"
           sh "git config --global user.email jenkins@proszowski.eu"
+          sh "git fetch"
 			 script { 
 			 	branchName = env.BRANCH_NAME
 			 	if(env.CHANGE_BRANCH != null){
