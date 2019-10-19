@@ -8,6 +8,8 @@ import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.services.EventService;
 
+import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -15,22 +17,22 @@ import java.util.List;
 @RequestMapping("/event")
 public class EventEndpoint {
 
-    private EventService eventService;
+    private final EventService eventService;
 
     @Autowired
-    public EventEndpoint(EventService eventService) {
+    public EventEndpoint(final EventService eventService) {
         this.eventService = eventService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "create")
-    public ResponseEntity<?> createEvent(@RequestBody EventDto eventDto) {
+    @PostMapping("create")
+    public ResponseEntity<Void> createEvent(@RequestBody @Valid final EventDto eventDto) {
         eventService.createEvent(eventDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "owned")
-    public ResponseEntity<List<Event>> getMyEvents() {
-        List<Event> events = eventService.getMyEvents();
+    @PostMapping("owned")
+    public ResponseEntity<Collection<Event>> getMyEvents() {
+        final List<Event> events = eventService.getMyEvents();
         return new ResponseEntity<>(events ,HttpStatus.OK);
     }
 }

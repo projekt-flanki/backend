@@ -25,32 +25,32 @@ public class JWTAuthTokenFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(final HttpServletRequest request,
+                                    final HttpServletResponse response,
+                                    final FilterChain filterChain)
             throws ServletException, IOException {
 
         try {
-            String jwt = getJwt(request);
+            final String jwt = getJwt(request);
             if (jwt != null && jwtProvider.validateJwtToken(jwt)) {
-                String username = jwtProvider.getUserNameFromJwtToken(jwt);
+                final String username = jwtProvider.getUserNameFromJwtToken(jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication
+                final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                final UsernamePasswordAuthenticationToken authentication
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error("Can NOT set user authentication -> Message: {}", e);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private String getJwt(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
+    private String getJwt(final HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.replace("Bearer ", "");

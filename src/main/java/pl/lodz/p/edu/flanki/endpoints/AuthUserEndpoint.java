@@ -15,22 +15,22 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class AuthUserEndpoint {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    public AuthUserEndpoint(UserService userService) {
+    public AuthUserEndpoint(final UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+    @PostMapping("register")
+    public ResponseEntity<Void> registerUser(@Valid @RequestBody final UserRegisterDto userRegisterDto) {
         userService.register(userRegisterDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
-        String responseData = userService.login(userLoginDto);
+    @PostMapping("login")
+    public ResponseEntity<String> loginUser(@Valid @RequestBody final UserLoginDto userLoginDto) {
+        final String responseData = userService.login(userLoginDto);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

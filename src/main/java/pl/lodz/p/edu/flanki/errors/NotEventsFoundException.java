@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NotEventsFoundException extends RuntimeException {
-    public NotEventsFoundException(String message) {
+    public NotEventsFoundException(final String message) {
         super(message);
     }
 }

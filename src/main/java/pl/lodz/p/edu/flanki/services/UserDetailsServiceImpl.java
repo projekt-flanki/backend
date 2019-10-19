@@ -12,17 +12,17 @@ import pl.lodz.p.edu.flanki.repositories.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) {
 
-        User user = userRepository.findByEmail(email)
+        final User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("user not found with -> username or email : " + email)
                 );

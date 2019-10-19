@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class UserNotExistException extends RuntimeException {
-    public UserNotExistException(String message) {
+    public UserNotExistException(final String message) {
         super(message);
     }
 }

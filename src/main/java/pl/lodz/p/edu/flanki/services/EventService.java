@@ -16,7 +16,7 @@ import pl.lodz.p.edu.flanki.repositories.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,47 +24,47 @@ import java.util.Optional;
 @Transactional
 public class EventService {
 
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
-    private EventOwnerRepository eventOwnerRepository;
+    private final EventOwnerRepository eventOwnerRepository;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository, EventOwnerRepository eventOwnerRepository, UserRepository userRepository) {
+    public EventService(final EventRepository eventRepository, final EventOwnerRepository eventOwnerRepository, final UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.eventOwnerRepository = eventOwnerRepository;
         this.userRepository = userRepository;
     }
 
-    public void createEvent(EventDto eventDto) {
-        User user = getUser();
-        Event event = buildEvent(eventDto);
+    public void createEvent(final EventDto eventDto) {
+        final User user = getUser();
+        final Event event = buildEvent(eventDto);
         eventRepository.save(event);
         saveEventToOwner(user, event);
     }
 
     private User getUser() {
-        UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByEmail(userPrinciple.getEmail()).orElseThrow(() ->
                 new UserNotExistException("Użytkownik nie istnieje."));
     }
 
-    private void saveEventToOwner(User user, Event event) {
-        EventOwner eventOwner;
-        Optional<EventOwner> eventOwnerOptional = eventOwnerRepository.findByUserId(user.getId());
+    private void saveEventToOwner(final User user, final Event event) {
+        final EventOwner eventOwner;
+        final Optional<EventOwner> eventOwnerOptional = eventOwnerRepository.findByUserId(user.getId());
         if (eventOwnerOptional.isPresent()) {
             eventOwner = eventOwnerOptional.get();
             eventOwner.getEvents().add(event);
         } else {
             eventOwner = EventOwner.builder()
                     .userId(user.getId())
-                    .events(Arrays.asList(event)).build();
+                    .events(Collections.singletonList(event)).build();
         }
         eventOwnerRepository.save(eventOwner);
     }
 
-    private Event buildEvent(EventDto eventDto) {
+    private Event buildEvent(final EventDto eventDto) {
         return Event.builder()
                 .name(eventDto.getName())
                 .date(LocalDateTime.now())
@@ -74,7 +74,7 @@ public class EventService {
     }
 
     public List<Event> getMyEvents() {
-        User user = getUser();
+        final User user = getUser();
         return eventOwnerRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new NotEventsFoundException("Użytkownik nie posiada wydarzeń"))
                 .getEvents();

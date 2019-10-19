@@ -12,16 +12,16 @@ import pl.lodz.p.edu.flanki.services.UserService;
 @RequestMapping("/user")
 public class UserDataEndpoint {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    public UserDataEndpoint(UserService userService) {
+    public UserDataEndpoint(final UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "info")
-    public ResponseEntity<?> getUserInfo() {
-        UserInfoDto userInfo = userService.getUserInfo();
+    @GetMapping("info")
+    public ResponseEntity<UserInfoDto> getUserInfo() {
+        final UserInfoDto userInfo = userService.getUserInfo();
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 }

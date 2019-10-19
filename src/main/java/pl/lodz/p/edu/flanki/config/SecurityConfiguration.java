@@ -29,26 +29,26 @@ import java.util.Collections;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServiceImpl userDetails;
-    private JWTAuthEntryPoint jwtAuthEntryPoint;
+    private final UserDetailsServiceImpl userDetails;
+    private final JWTAuthEntryPoint jwtAuthEntryPoint;
 
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetails, JWTAuthEntryPoint jwtAuthEntryPoint) {
+    public SecurityConfiguration(final UserDetailsServiceImpl userDetails, final JWTAuthEntryPoint jwtAuthEntryPoint) {
         this.userDetails = userDetails;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
 
     @Override
-    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    public void configure(final AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .userDetailsService(userDetails)
                 .passwordEncoder(passwordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login/**").permitAll()
@@ -63,19 +63,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+        final CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Collections.singletonList("*"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -91,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JWTAuthTokenFilter jwtAuthTokenFilter() {
+    private JWTAuthTokenFilter jwtAuthTokenFilter() {
         return new JWTAuthTokenFilter();
     }
 }

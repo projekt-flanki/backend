@@ -87,7 +87,7 @@ public class UserService {
         if(!optionalUser.isPresent()){
             throw new BadJwtTokenException("Niepoprawny token");
         } else {
-            User user = optionalUser.get();
+            final User user = optionalUser.get();
             return UserInfoDto.builder()
                     .email(user.getEmail())
                     .username(user.getUsername())

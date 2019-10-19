@@ -8,6 +8,7 @@ import pl.lodz.p.edu.flanki.enums.UserRole;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -18,7 +19,7 @@ import javax.validation.constraints.Email;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private UUID id;
 
     @Column(name = "username")
     private String username;

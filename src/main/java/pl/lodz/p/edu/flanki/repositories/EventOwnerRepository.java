@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 import pl.lodz.p.edu.flanki.entities.EventOwner;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface EventOwnerRepository extends JpaRepository<EventOwner, Integer> {
-    Optional<EventOwner> findByUserId(Integer userId);
+public interface EventOwnerRepository extends JpaRepository<EventOwner, UUID> {
+    Optional<EventOwner> findByUserId(UUID userId);
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -18,10 +19,10 @@ public class EventOwner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private UUID id;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private UUID userId;
 
     @OneToMany
     @Column(name = "events")
