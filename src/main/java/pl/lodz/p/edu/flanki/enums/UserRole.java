@@ -1,12 +1,11 @@
 package pl.lodz.p.edu.flanki.enums;
 
 public enum UserRole {
-    ADMIN("ADMIN"),
     USER("USER");
 
-    private String name;
+    private final String name;
 
-    UserRole(String name) {
+    UserRole(final String name) {
         this.name = name;
     }
 

@@ -14,12 +14,13 @@ import java.io.IOException;
 public class JWTAuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException e)
+    public void commence(final HttpServletRequest request,
+                         final HttpServletResponse response,
+                         final AuthenticationException e)
             throws IOException {
 
         log.error("Unauthorized error. Message - {}", e.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error -> Unauthorized");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Niepoprawny email lub hasło");
+        //TODO: decide if we wanna have english or polish version in responses (of maybe both?)
     }
 }
