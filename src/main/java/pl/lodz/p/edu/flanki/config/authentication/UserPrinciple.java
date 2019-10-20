@@ -12,7 +12,6 @@ import pl.lodz.p.edu.flanki.entities.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Data
@@ -20,13 +19,13 @@ import java.util.UUID;
 public class UserPrinciple implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
+    private String id;
     private String email;
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    private UserPrinciple(final UUID id, final String email, final String password, final Collection<? extends GrantedAuthority> authorities) {
+    private UserPrinciple(final String id, final String email, final String password, final Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;

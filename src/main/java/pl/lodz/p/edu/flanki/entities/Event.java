@@ -4,10 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,18 +25,28 @@ import java.util.UUID;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private String id;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private Instant date;
 
     @Column(name = "location")
     private String location;
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(targetEntity = User.class)
+    private Set<User> owners;
+
+    @ManyToMany(targetEntity = User.class)
+    private Set<User> participants;
 }

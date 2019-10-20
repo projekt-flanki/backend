@@ -8,8 +8,11 @@ import lombok.NonNull;
 @Builder
 public class UserInfoDto {
 
+    private String id;
+
     @NonNull
     private String username;
+
     @NonNull
     private String email;
 }

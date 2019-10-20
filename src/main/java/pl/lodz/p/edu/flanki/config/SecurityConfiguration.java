@@ -75,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    private PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -91,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    private JWTAuthTokenFilter jwtAuthTokenFilter() {
+    public JWTAuthTokenFilter jwtAuthTokenFilter() {
         return new JWTAuthTokenFilter();
     }
 }
