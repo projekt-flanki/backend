@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://flanki.database.windows.net:1433;database=flankiDB;user=flanki@flanki;password=FLANKI_PASSWORD;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    url: ${FLANKI_JDBC_URL}
   jpa:
     hibernate:
       ddl-auto: update
