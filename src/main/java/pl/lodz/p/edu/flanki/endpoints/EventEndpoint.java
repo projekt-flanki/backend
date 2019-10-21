@@ -32,6 +32,12 @@ public class EventEndpoint {
     @GetMapping("owned")
     public ResponseEntity<Collection<EventDto>> getMyEvents() {
         final List<EventDto> events = eventService.getMyEvents();
-        return new ResponseEntity<>(events ,HttpStatus.OK);
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("all")
+    public ResponseEntity<Collection<EventDto>> getAllEvents() {
+        final List<EventDto> events = eventService.getAllEvents();
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 }
