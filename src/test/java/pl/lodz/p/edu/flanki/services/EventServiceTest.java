@@ -43,7 +43,7 @@ public class EventServiceTest {
         return Arrays.asList(
                 Event
                         .builder()
-                        .id(UUID.randomUUID().toString())
+                        .id(UUID.randomUUID())
                         .name("EXAMPLE")
                         .date(Instant.now())
                         .location("EXAMPLE_LOCATION")
@@ -53,7 +53,7 @@ public class EventServiceTest {
                         .build(),
                 Event
                         .builder()
-                        .id(UUID.randomUUID().toString())
+                        .id(UUID.randomUUID())
                         .name("EXAMPLE")
                         .date(Instant.now())
                         .location("EXAMPLE_LOCATION")
@@ -63,7 +63,7 @@ public class EventServiceTest {
                         .build(),
                 Event
                         .builder()
-                        .id(UUID.randomUUID().toString())
+                        .id(UUID.randomUUID())
                         .name("EXAMPLE")
                         .date(Instant.now())
                         .location("EXAMPLE_LOCATION")

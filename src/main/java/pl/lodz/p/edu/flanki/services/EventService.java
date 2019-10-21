@@ -3,10 +3,14 @@ package pl.lodz.p.edu.flanki.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
+import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
+import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
+import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.repositories.EventRepository;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,5 +46,16 @@ public class EventService {
         return eventRepository.findAll().stream()
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public void joinEvent(JoinEventDto joinEventDto) {
+        User user = userService.getUser();
+        Event event = eventRepository.findById(joinEventDto.getUuid()).orElseThrow(
+                () -> new NotEventsFoundException("Wydarzenie nie istnieje"));
+        if (!event.getParticipants().contains(user)) {
+            event.getParticipants().add(user);
+        } else {
+            throw new UserAlreadyRegisteredException("Użytkownik już dołączył do spotkania");
+        }
     }
 }
