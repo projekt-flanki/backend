@@ -37,4 +37,10 @@ public class EventService {
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    public List<EventDto> getAllEvents() {
+        return eventRepository.findAll().stream()
+                .map(eventMapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
