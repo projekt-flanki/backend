@@ -65,7 +65,7 @@ pipeline {
 			expression { should_deploy == true }
 		}
 	 	steps{
-	 		sh "ssh -i ~/.ssh/id_rsa flanki@40.68.3.243 'cd backend; git pull; pkill java; (mvn spring-boot:run &); exit'"
+	 		sh "ssh -i ~/.ssh/id_rsa flanki@40.68.3.243 'cd backend; git pull; pkill java; nohup mvn spring-boot:run > foo.out 2> foo.err < /dev/null &'"
 		}
 	 }
   } 
