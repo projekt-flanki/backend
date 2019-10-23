@@ -5,12 +5,13 @@ import lombok.Data;
 import lombok.NonNull;
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Builder
 public class EventDto {
 
-    private String id;
+    private UUID id;
 
     @NonNull
     private String name;

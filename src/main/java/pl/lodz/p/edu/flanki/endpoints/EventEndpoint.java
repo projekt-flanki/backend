@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
+import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
 import pl.lodz.p.edu.flanki.services.EventService;
 
 import javax.validation.Valid;
@@ -39,5 +40,11 @@ public class EventEndpoint {
     public ResponseEntity<Collection<EventDto>> getAllEvents() {
         final List<EventDto> events = eventService.getAllEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @PostMapping("join")
+    public ResponseEntity<Void> joinEvent(@RequestBody @Valid final JoinEventDto joinEventDto) {
+        eventService.joinEvent(joinEventDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
