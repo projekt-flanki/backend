@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.config.authentication.JWTProvider;
 import pl.lodz.p.edu.flanki.config.authentication.UserPrinciple;
-import pl.lodz.p.edu.flanki.dtos.UserInfoDto;
 import pl.lodz.p.edu.flanki.dtos.UserLoginDto;
 import pl.lodz.p.edu.flanki.dtos.UserRegisterDto;
 import pl.lodz.p.edu.flanki.entities.User;
@@ -25,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @Transactional
-public class UserService {
+public class AuthorizationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -33,10 +32,10 @@ public class UserService {
     private final JWTProvider jwtProvider;
 
     @Autowired
-    public UserService(final UserRepository userRepository,
-                       final PasswordEncoder passwordEncoder,
-                       final AuthenticationManager authenticationManager,
-                       final JWTProvider jwtProvider) {
+    public AuthorizationService(final UserRepository userRepository,
+                                final PasswordEncoder passwordEncoder,
+                                final AuthenticationManager authenticationManager,
+                                final JWTProvider jwtProvider) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -52,7 +51,7 @@ public class UserService {
                 ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final Optional<User> username = Optional.ofNullable(userRepository.findByEmail(userLoginDto.getEmail()));
+        final Optional<User> username = userRepository.findByEmail(userLoginDto.getEmail());
 
         if (username.isPresent()) {
             log.info("authorized user " + username.get().getEmail());
@@ -75,7 +74,7 @@ public class UserService {
 
     private void checkEmailValidity(final String email) {
 
-        final Optional<User> checkUser = Optional.ofNullable(userRepository.findByEmail(email));
+        final Optional<User> checkUser = userRepository.findByEmail(email);
 
         if (checkUser.isPresent()) {
             throw new UserAlreadyRegisteredException("Użytkownik o podanym e-mail już istnieje.");
@@ -84,7 +83,7 @@ public class UserService {
 
     public User getUser() {
         final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return Optional.ofNullable(userRepository.findByEmail(userPrinciple.getEmail())).orElseThrow(() ->
+        return userRepository.findByEmail(userPrinciple.getEmail()).orElseThrow(() ->
                 new UserNotExistException("Użytkownik nie istnieje."));
     }
 

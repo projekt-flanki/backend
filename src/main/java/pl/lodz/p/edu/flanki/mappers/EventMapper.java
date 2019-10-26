@@ -6,8 +6,9 @@ import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,8 +21,11 @@ public class EventMapper {
     }
 
     public Event toModel(final EventDto eventDto) {
-        final Set<User> owners = new HashSet<>(userRepository.findAllById(eventDto.getOwners()));
-        final Set<User> participants = new HashSet<>(userRepository.findAllById(eventDto.getParticipants()));
+        final Set<User> owners = new HashSet<>(userRepository.findAllById(eventDto.getOwnerIds()));
+
+        final Set<User> participants = Optional.ofNullable(eventDto.getGetParticipantIds())
+                .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
+                .orElse(new HashSet<>());
 
         return Event.builder()
                 .name(eventDto.getName())
@@ -34,11 +38,11 @@ public class EventMapper {
     }
 
     public EventDto toDto(final Event event) {
-        final Set<String> ownersIds = event.getOwners().stream()
+        final Set<UUID> ownersIds = event.getOwners().stream()
                 .map(User::getId)
                 .collect(Collectors.toSet());
 
-        final Set<String> participantsIds = event.getParticipants().stream()
+        final Set<UUID> participantsIds = event.getParticipants().stream()
                 .map(User::getId)
                 .collect(Collectors.toSet());
 
@@ -48,8 +52,8 @@ public class EventMapper {
                 .description(event.getDescription())
                 .location(event.getLocation())
                 .name(event.getName())
-                .owners(ownersIds)
-                .participants(participantsIds)
+                .ownerIds(ownersIds)
+                .getParticipantIds(participantsIds)
                 .build();
     }
 }

@@ -39,7 +39,7 @@ public class UserPrinciple implements UserDetails {
         authorities.add(authority);
 
         return new UserPrinciple(
-                user.getId(),
+                user.getId().toString(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities);

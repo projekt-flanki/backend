@@ -6,26 +6,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.UserInfoDto;
 import pl.lodz.p.edu.flanki.mappers.UserInfoMapper;
-import pl.lodz.p.edu.flanki.services.UserService;
+import pl.lodz.p.edu.flanki.services.AuthorizationService;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserDataEndpoint {
 
-    private final UserService userService;
-
+    private final AuthorizationService authorizationService;
     private final UserInfoMapper userInfoMapper;
 
     @Autowired
-    public UserDataEndpoint(final UserService userService, final UserInfoMapper userInfoMapper) {
-        this.userService = userService;
+    public UserDataEndpoint(final AuthorizationService authorizationService, final UserInfoMapper userInfoMapper) {
+        this.authorizationService = authorizationService;
         this.userInfoMapper = userInfoMapper;
     }
 
     @GetMapping("info")
     public ResponseEntity<UserInfoDto> getUserInfo() {
-        final UserInfoDto userInfo = userInfoMapper.toDto(userService.getUser());
+        final UserInfoDto userInfo = userInfoMapper.toDto(authorizationService.getUser());
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 }

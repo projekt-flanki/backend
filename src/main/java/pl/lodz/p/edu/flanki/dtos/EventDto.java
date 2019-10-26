@@ -23,9 +23,9 @@ public class EventDto {
     private Instant date;
 
     @NonNull
-    private Set<String> owners;
+    private Set<UUID> ownerIds;
 
-    private Set<String> participants;
+    private Set<UUID> getParticipantIds;
 
     private String description;
 
