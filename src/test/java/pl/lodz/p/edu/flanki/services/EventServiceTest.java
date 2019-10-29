@@ -21,9 +21,9 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
 
     private final FakeEventRepository eventRepository = new FakeEventRepository();
     private final FakeUserRepository userRepository = new FakeUserRepository();
-    private final AuthorizationService authorizationService = mock(AuthorizationService.class);
+    private final UserService userService = mock(UserService.class);
     private final EventMapper eventMapper = new EventMapper(userRepository);
-    private final EventService eventService = new EventService(eventRepository, authorizationService);
+    private final EventService eventService = new EventService(eventRepository, userService);
 
 
     @Test
@@ -93,7 +93,7 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
     private User thereIsAnUser() {
         final User user = getExampleUser();
         userRepository.withUsers(Collections.singletonList(user));
-        when(authorizationService.getUser()).thenReturn(user);
+        when(userService.getUser()).thenReturn(user);
         return user;
     }
 

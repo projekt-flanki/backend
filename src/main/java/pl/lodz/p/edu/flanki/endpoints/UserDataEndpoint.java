@@ -6,25 +6,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.UserInfoDto;
 import pl.lodz.p.edu.flanki.mappers.UserInfoMapper;
-import pl.lodz.p.edu.flanki.services.AuthorizationService;
+import pl.lodz.p.edu.flanki.services.UserService;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserDataEndpoint {
 
-    private final AuthorizationService authorizationService;
+    private final UserService userService;
     private final UserInfoMapper userInfoMapper;
 
     @Autowired
-    public UserDataEndpoint(final AuthorizationService authorizationService, final UserInfoMapper userInfoMapper) {
-        this.authorizationService = authorizationService;
+    public UserDataEndpoint(final UserService userService, final UserInfoMapper userInfoMapper) {
+        this.userService = userService;
         this.userInfoMapper = userInfoMapper;
     }
 
     @GetMapping("info")
     public ResponseEntity<UserInfoDto> getUserInfo() {
-        final UserInfoDto userInfo = userInfoMapper.toDto(authorizationService.getUser());
+        final UserInfoDto userInfo = userInfoMapper.toDto(userService.getUser());
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @PostMapping("set-image")
+    public ResponseEntity<UserInfoDto> setProfileImage(@RequestBody UserInfoDto userInfoDto) {
+        userService.setProfileImage(userInfoDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -19,16 +19,17 @@ import java.util.UUID;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private final AuthorizationService authorizationService;
+    private final UserService userService;
+
 
     @Autowired
-    EventService(final EventRepository eventRepository, final AuthorizationService authorizationService) {
+    EventService(final EventRepository eventRepository, UserService userService) {
         this.eventRepository = eventRepository;
-        this.authorizationService = authorizationService;
+        this.userService = userService;
     }
 
     public UUID createEvent(final Event event) {
-        final User user = authorizationService.getUser();
+        final User user = userService.getUser();
         event.toBuilder()
                 .owners(Collections.singleton(user))
                 .build();
@@ -36,7 +37,7 @@ public class EventService {
     }
 
     public List<Event> getMyEvents() {
-        final User user = authorizationService.getUser();
+        final User user = userService.getUser();
         return eventRepository.findEventsByOwnerId(user.getId());
     }
 
@@ -49,7 +50,7 @@ public class EventService {
     }
 
     public void joinEvent(final UUID id) {
-        final User user = authorizationService.getUser();
+        final User user = userService.getUser();
         final Event event = eventRepository.findById(id).orElseThrow(
                 () -> new NotEventsFoundException("Wydarzenie nie istnieje"));
         final Set<User> participants = new HashSet<>(event.getParticipants());
