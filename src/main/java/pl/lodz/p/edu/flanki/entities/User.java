@@ -45,11 +45,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @Column
+    @Column(name = "image")
     private String profileImageBase64;
 
 }
