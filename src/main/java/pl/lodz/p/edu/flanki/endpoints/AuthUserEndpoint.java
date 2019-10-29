@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.UserLoginDto;
 import pl.lodz.p.edu.flanki.dtos.UserRegisterDto;
-import pl.lodz.p.edu.flanki.services.UserService;
+import pl.lodz.p.edu.flanki.services.AuthorizationService;
 
 import javax.validation.Valid;
 
@@ -15,10 +15,10 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class AuthUserEndpoint {
 
-    private final UserService userService;
+    private final AuthorizationService userService;
 
     @Autowired
-    public AuthUserEndpoint(final UserService userService) {
+    public AuthUserEndpoint(final AuthorizationService userService) {
         this.userService = userService;
     }
 
