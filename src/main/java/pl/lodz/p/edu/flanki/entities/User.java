@@ -49,4 +49,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Column
+    private String profileImageBase64;
+
 }

@@ -16,4 +16,6 @@ public class UserInfoDto {
 
     @NonNull
     private String email;
+
+    private String profileImageBase64;
 }

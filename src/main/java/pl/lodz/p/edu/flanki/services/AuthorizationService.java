@@ -9,15 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.config.authentication.JWTProvider;
-import pl.lodz.p.edu.flanki.config.authentication.UserPrinciple;
 import pl.lodz.p.edu.flanki.dtos.UserLoginDto;
 import pl.lodz.p.edu.flanki.dtos.UserRegisterDto;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.enums.UserRole;
 import pl.lodz.p.edu.flanki.errors.BadUserCredentialsException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
-import pl.lodz.p.edu.flanki.errors.UserNotExistException;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
+
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -68,6 +67,7 @@ public class AuthorizationService {
                 .username(userRegisterDto.getName())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
                 .role(UserRole.USER)
+                .profileImageBase64("")
                 .build();
         userRepository.save(user);
     }
@@ -79,12 +79,6 @@ public class AuthorizationService {
         if (checkUser.isPresent()) {
             throw new UserAlreadyRegisteredException("Użytkownik o podanym e-mail już istnieje.");
         }
-    }
-
-    public User getUser() {
-        final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByEmail(userPrinciple.getEmail()).orElseThrow(() ->
-                new UserNotExistException("Użytkownik nie istnieje."));
     }
 
 }
