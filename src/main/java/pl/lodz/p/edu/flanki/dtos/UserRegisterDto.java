@@ -18,4 +18,7 @@ public class UserRegisterDto {
 
     @NonNull
     private String password;
+
+    @NonNull
+    private String profileImageBase64;
 }

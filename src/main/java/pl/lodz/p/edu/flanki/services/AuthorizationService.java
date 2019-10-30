@@ -67,7 +67,7 @@ public class AuthorizationService {
                 .username(userRegisterDto.getName())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
                 .role(UserRole.USER)
-                .profileImageBase64("")
+                .profileImageBase64(userRegisterDto.getProfileImageBase64())
                 .build();
         userRepository.save(user);
     }
