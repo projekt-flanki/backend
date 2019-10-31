@@ -21,7 +21,9 @@ public class EventMapper {
     }
 
     public Event toModel(final EventDto eventDto) {
-        final Set<User> owners = new HashSet<>(userRepository.findAllById(eventDto.getOwnerIds()));
+        final Set<User> owners = Optional.ofNullable(eventDto.getOwnerIds())
+                .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
+                .orElse(new HashSet<>());
 
         final Set<User> participants = Optional.ofNullable(eventDto.getGetParticipantIds())
                 .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
