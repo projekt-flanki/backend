@@ -25,7 +25,7 @@ public class EventMapper {
                 .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
                 .orElse(new HashSet<>());
 
-        final Set<User> participants = Optional.ofNullable(eventDto.getGetParticipantIds())
+        final Set<User> participants = Optional.ofNullable(eventDto.getParticipantIds())
                 .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
                 .orElse(new HashSet<>());
 
@@ -55,7 +55,7 @@ public class EventMapper {
                 .location(event.getLocation())
                 .name(event.getName())
                 .ownerIds(ownersIds)
-                .getParticipantIds(participantsIds)
+                .participantIds(participantsIds)
                 .build();
     }
 }

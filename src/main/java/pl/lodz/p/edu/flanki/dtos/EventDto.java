@@ -24,7 +24,7 @@ public class EventDto {
 
     private Set<UUID> ownerIds;
 
-    private Set<UUID> getParticipantIds;
+    private Set<UUID> participantIds;
 
     private String description;
 
