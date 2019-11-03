@@ -30,10 +30,10 @@ public class EventService {
 
     public UUID createEvent(final Event event) {
         final User user = userService.getUser();
-        event.toBuilder()
+        final Event newEvent = event.toBuilder()
                 .owners(Collections.singleton(user))
                 .build();
-        return eventRepository.save(event);
+        return eventRepository.save(newEvent);
     }
 
     public List<Event> getMyEvents() {

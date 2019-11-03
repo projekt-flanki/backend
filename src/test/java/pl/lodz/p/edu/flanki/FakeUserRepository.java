@@ -14,7 +14,7 @@ public class FakeUserRepository implements UserRepository {
 
     private final HashMap<UUID, User> users = new HashMap<>();
 
-    public void withUsers(final List<User> users){
+    public void withUsers(final List<User> users) {
         final Map<UUID, User> usersMap = users.stream()
                 .collect(Collectors.toMap(User::getId, u -> u));
         this.users.putAll(usersMap);

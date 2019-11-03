@@ -65,7 +65,7 @@ pipeline {
 			expression { should_deploy == true }
 		}
 	 	steps{
-	 		sh "ssh -i ~/.ssh/id_rsa flanki@40.68.3.243 'rm -rf backend; git clone https://github.com/projekt-flanki/backend.git; cd backend; pkill java; nohup mvn spring-boot:run > foo.out 2> foo.err < /dev/null &'"
+			sh "ssh -i ~/.ssh/flanki/id_rsa flanki@40.68.3.243 'source .bashrc; source /etc/profile; ./deploy.sh'"
 		}
 	 }
   } 
