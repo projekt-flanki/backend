@@ -58,4 +58,10 @@ public class EventEndpoint {
         eventService.joinEvent(joinEventDto.getUuid());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("edit")
+    public ResponseEntity<Void> editEvent(@RequestBody @Valid final EventDto eventDto) {
+        eventService.editEvent(eventDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

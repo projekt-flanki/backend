@@ -23,7 +23,7 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
     private final FakeUserRepository userRepository = new FakeUserRepository();
     private final UserService userService = mock(UserService.class);
     private final EventMapper eventMapper = new EventMapper(userRepository);
-    private final EventService eventService = new EventService(eventRepository, userService);
+    private final EventService eventService = new EventService(eventRepository, userService, eventMapper);
 
 
     @Test

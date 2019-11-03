@@ -2,17 +2,17 @@ package pl.lodz.p.edu.flanki.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
+import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.repositories.EventRepository;
+
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import javax.validation.Valid;
+import java.util.*;
 
 @Service
 @Transactional
@@ -20,12 +20,19 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
+    private final EventMapper eventMapper;
 
 
     @Autowired
-    EventService(final EventRepository eventRepository, UserService userService) {
+    EventService(final EventRepository eventRepository, UserService userService, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.eventMapper = eventMapper;
+    }
+
+    private Event getEvent(UUID id) {
+        return eventRepository.findById(id).orElseThrow(
+                () -> new NotEventsFoundException("Wydarzenie nie istnieje"));
     }
 
     public UUID createEvent(final Event event) {
@@ -45,14 +52,13 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public void remove(final UUID id){
+    public void remove(final UUID id) {
         eventRepository.delete(id);
     }
 
     public void joinEvent(final UUID id) {
         final User user = userService.getUser();
-        final Event event = eventRepository.findById(id).orElseThrow(
-                () -> new NotEventsFoundException("Wydarzenie nie istnieje"));
+        final Event event = getEvent(id);
         final Set<User> participants = new HashSet<>(event.getParticipants());
         if (!participants.contains(user)) {
             participants.add(user);
@@ -61,5 +67,11 @@ public class EventService {
         } else {
             throw new UserAlreadyRegisteredException("Użytkownik już dołączył do spotkania");
         }
+    }
+
+    public void editEvent(@Valid EventDto eventDto) {
+        final Event editedEvent = eventMapper.toModel(eventDto);
+        final Event eventToPersist = editedEvent.toBuilder().id(eventDto.getId()).build();
+        eventRepository.save(eventToPersist);
     }
 }
