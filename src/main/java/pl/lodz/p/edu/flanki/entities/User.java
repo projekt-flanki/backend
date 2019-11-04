@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Range;
 import pl.lodz.p.edu.flanki.enums.UserRole;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,5 +52,9 @@ public class User {
 
     @Column(name = "image")
     private String profileImageBase64;
+
+    @Column(name = "rating")
+    @Range(min = 1, max = 5)
+    private Double rating;
 
 }
