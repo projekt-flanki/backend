@@ -13,6 +13,7 @@ public class UserInfoMapper {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .profileImageBase64(user.getProfileImageBase64())
+                .rating(user.getRating())
                 .build();
     }
 }

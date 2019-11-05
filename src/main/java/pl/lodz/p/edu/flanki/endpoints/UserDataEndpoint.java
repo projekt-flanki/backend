@@ -29,7 +29,7 @@ public class UserDataEndpoint {
     }
 
     @PostMapping("set-image")
-    public ResponseEntity<UserInfoDto> setProfileImage(@RequestBody UserInfoDto userInfoDto) {
+    public ResponseEntity<UserInfoDto> setProfileImage(@RequestBody final UserInfoDto userInfoDto) {
         userService.setProfileImage(userInfoDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
