@@ -33,4 +33,12 @@ public class UserDataEndpoint {
         userService.setProfileImage(userInfoDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("edit")
+    public ResponseEntity<UserInfoDto> editUser(@RequestBody final UserInfoDto userInfoDto) {
+        userService.editUser(userInfoDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

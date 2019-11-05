@@ -33,4 +33,18 @@ public class UserService {
         user.toBuilder().profileImageBase64(userInfoDto.getProfileImageBase64());
         userRepository.save(user);
     }
+
+    public void editUser(UserInfoDto userInfoDto) {
+
+        final User user = userRepository.findByEmail(userInfoDto.getEmail()).orElseThrow(
+                () -> new UserNotExistException("Użytkownik nie istnieje")
+        );
+
+        final User userEdited = user.toBuilder()
+                .username(userInfoDto.getUsername())
+                .rating(userInfoDto.getRating())
+                .profileImageBase64(userInfoDto.getProfileImageBase64())
+                .build();
+        userRepository.save(userEdited);
+    }
 }
