@@ -18,7 +18,10 @@ public class EventDto {
     private String name;
 
     @NonNull
-    private String location;
+    private double longitude;
+
+    @NonNull
+    private double latitude;
 
     @NonNull
     private Instant date;

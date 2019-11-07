@@ -6,28 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.time.Instant;
-import java.util.Set;
 import java.util.UUID;
 
-@Builder(toBuilder = true)
 @Entity
-@Table(name = "EVENTS")
+@Builder
 @Data
+@Table(name = "LOCATIONS")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Setter(value = AccessLevel.NONE)
-public class Event {
+public class Location {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -37,22 +31,9 @@ public class Event {
     )
     private UUID id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "latitude")
+    private double latitude;
 
-    @Column(name = "date")
-    private Instant date;
-
-    @OneToOne
-    @Cascade(value = CascadeType.ALL)
-    private Location location;
-
-    @Column(name = "description")
-    private String description;
-
-    @ManyToMany(targetEntity = User.class)
-    private Set<User> owners;
-
-    @ManyToMany(targetEntity = User.class)
-    private Set<User> participants;
+    @Column(name = "longitude")
+    private double longitude;
 }

@@ -21,5 +21,5 @@ public class UserInfoDto {
     private String profileImageBase64;
 
     @Range(min = 1, max = 5)
-    private Double rating;
+    private double rating;
 }
