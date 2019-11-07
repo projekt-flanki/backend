@@ -1,6 +1,7 @@
 package pl.lodz.p.edu.flanki;
 
 import pl.lodz.p.edu.flanki.entities.Event;
+import pl.lodz.p.edu.flanki.entities.Location;
 import pl.lodz.p.edu.flanki.entities.User;
 import java.nio.charset.Charset;
 import java.time.Instant;
@@ -30,7 +31,7 @@ public interface WithEventsData {
                 .id(UUID.randomUUID())
                 .name(generateRandomString())
                 .date(Instant.now())
-                .location(generateRandomString())
+                .location(generateRandomLocation())
                 .description(generateRandomString())
                 .owners(Collections.emptySet())
                 .participants(Collections.emptySet())
@@ -47,5 +48,13 @@ public interface WithEventsData {
         final byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
         return new String(array, Charset.forName("UTF-8"));
+    }
+
+    default Location generateRandomLocation(){
+        List<Double> twoDoubles = new Random().doubles(2).boxed().collect(Collectors.toList());
+        return Location.builder()
+                .latitude(twoDoubles.get(0))
+                .longitude(twoDoubles.get(1))
+                .build();
     }
 }

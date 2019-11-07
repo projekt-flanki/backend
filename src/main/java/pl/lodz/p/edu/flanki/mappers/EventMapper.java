@@ -3,6 +3,7 @@ package pl.lodz.p.edu.flanki.mappers;
 import org.springframework.stereotype.Component;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.entities.Event;
+import pl.lodz.p.edu.flanki.entities.Location;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
 import java.util.HashSet;
@@ -32,7 +33,10 @@ public class EventMapper {
         return Event.builder()
                 .name(eventDto.getName())
                 .date(eventDto.getDate())
-                .location(eventDto.getLocation())
+                .location(Location.builder()
+                        .latitude(eventDto.getLatitude())
+                        .longitude(eventDto.getLongitude())
+                        .build())
                 .description(eventDto.getDescription())
                 .owners(owners)
                 .participants(participants)
@@ -52,7 +56,8 @@ public class EventMapper {
                 .id(event.getId())
                 .date(event.getDate())
                 .description(event.getDescription())
-                .location(event.getLocation())
+                .latitude(event.getLocation().getLatitude())
+                .longitude(event.getLocation().getLongitude())
                 .name(event.getName())
                 .ownerIds(ownersIds)
                 .participantIds(participantsIds)
