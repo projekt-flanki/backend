@@ -1,10 +1,16 @@
 spring:
   datasource:
     url: ${FLANKI_JDBC_URL}
+    username: ${USER_FLANKI_DB}
+    password: ${PASSWORD_FLANKI_DB}
   jpa:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
 app:
   jwtSecret: jwtWorkerStatsSecretKey
   jwtExpiration: 864000
