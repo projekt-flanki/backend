@@ -27,4 +27,14 @@ public class UsersStorage implements UserRepository {
     public List<User> findAllById(final Iterable<UUID> ids) {
         return jpaUserRepository.findAllById(ids);
     }
+
+    @Override
+    public List<User> findAllByOrderByPointsDesc() {
+        return jpaUserRepository.findAllByOrderByPointsDesc();
+    }
+
+    @Override
+    public List<User> findAllByOrderByRatingDesc() {
+        return jpaUserRepository.findAllByOrderByRatingDesc();
+    }
 }

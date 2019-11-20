@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
+import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.services.EventService;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -57,6 +59,13 @@ public class EventEndpoint {
     public ResponseEntity<Void> joinEvent(@RequestBody @Valid final JoinEventDto joinEventDto) {
         eventService.joinEvent(joinEventDto.getEventId());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("{eventId}")
+    public ResponseEntity<EventDto> getEvent(@PathVariable final UUID eventId) {
+        final Event event = eventService.getEvent(eventId);
+        final EventDto eventDto = eventMapper.toDto(event);
+        return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
 
     @PutMapping("edit")

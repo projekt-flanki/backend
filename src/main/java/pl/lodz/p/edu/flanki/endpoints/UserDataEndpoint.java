@@ -8,6 +8,8 @@ import pl.lodz.p.edu.flanki.dtos.UserInfoDto;
 import pl.lodz.p.edu.flanki.mappers.UserInfoMapper;
 import pl.lodz.p.edu.flanki.services.UserService;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
@@ -40,5 +42,13 @@ public class UserDataEndpoint {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("points-rank")
+    public ResponseEntity<List<UserInfoDto>> getPointsRanking() {
+        return new ResponseEntity<>(userService.getUsersByPoints(), HttpStatus.OK);
+    }
 
+    @GetMapping("rating-rank")
+    public ResponseEntity<List<UserInfoDto>> getRatingRanking() {
+        return new ResponseEntity<>(userService.getRatingRanking(), HttpStatus.OK);
+    }
 }

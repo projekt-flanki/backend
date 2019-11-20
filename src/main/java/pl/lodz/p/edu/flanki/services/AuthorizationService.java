@@ -69,6 +69,7 @@ public class AuthorizationService {
                 .role(UserRole.USER)
                 .profileImageBase64(userRegisterDto.getProfileImageBase64())
                 .rating(5.0)
+                .points(0)
                 .build();
         userRepository.save(user);
     }

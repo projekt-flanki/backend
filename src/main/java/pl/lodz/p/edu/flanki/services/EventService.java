@@ -36,7 +36,7 @@ public class EventService {
         this.eventMapper = eventMapper;
     }
 
-    private Event getEvent(final UUID id) {
+    public Event getEvent(final UUID id) {
         return eventRepository.findById(id).orElseThrow(
                 () -> new NotEventsFoundException("Wydarzenie nie istnieje"));
     }

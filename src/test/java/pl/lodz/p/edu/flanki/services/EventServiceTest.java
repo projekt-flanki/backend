@@ -1,11 +1,15 @@
 package pl.lodz.p.edu.flanki.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Iterables;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import pl.lodz.p.edu.flanki.FakeEventRepository;
 import pl.lodz.p.edu.flanki.FakeUserRepository;
 import pl.lodz.p.edu.flanki.WithEventsData;
@@ -16,6 +20,7 @@ import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData {
 
@@ -80,6 +85,37 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
         assertThat(actualEventsAfterRemoval).hasSize(1);
         assertThat(actualEventsAfterRemoval.get(0)).isEqualTo(expectedEvents.get(1));
 
+    }
+
+    @ParameterizedTest(name = "{index}")
+    @MethodSource("events")
+    void shouldJoinToTeamWithLessNumberOfMembers(final Event event, final int expectedFirstTeamSize, final int expectedSecondTeamSize){
+        //given
+        thereIsAnUser();
+        thereIsAnEventInRepository(event);
+
+        //when
+        eventService.joinEvent(event.getId());
+
+        //then
+        final Event modifiedEvent = eventRepository.findById(event.getId()).get();
+        assertEquals(expectedFirstTeamSize, modifiedEvent.getFirstTeam().size());
+        assertEquals(expectedSecondTeamSize, modifiedEvent.getSecondTeam().size());
+
+    }
+
+    private static Stream<Arguments> events(){
+        final WithEventsData withEventsData = new WithEventsData(){};
+        final Event firstEvent = withEventsData.getExampleEventWithGivenSizesOfTeams(0, 0);
+        final Event secondEvent = withEventsData.getExampleEventWithGivenSizesOfTeams(1, 0);
+        final Event thirdEvent = withEventsData.getExampleEventWithGivenSizesOfTeams(2, 0);
+        final Event fourthEvent = withEventsData.getExampleEventWithGivenSizesOfTeams(0, 1);
+        return Stream.of(
+                Arguments.of(firstEvent, 1, 0),
+                Arguments.of(secondEvent, 1, 1),
+                Arguments.of(thirdEvent, 2, 1),
+                Arguments.of(fourthEvent, 1, 1)
+        );
     }
 
     private void thereAreEventsInRepository(final List<Event> events) {
