@@ -11,6 +11,6 @@ import java.util.UUID;
 public class JoinEventDto {
 
     @NotNull
-    private UUID uuid;
+    private UUID eventId;
 
 }

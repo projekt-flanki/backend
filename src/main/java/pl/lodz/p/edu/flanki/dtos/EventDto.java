@@ -28,7 +28,9 @@ public class EventDto {
 
     private Set<UUID> ownerIds;
 
-    private Set<UUID> participantIds;
+    private Set<UUID> firstTeamIds;
+
+    private Set<UUID> secondTeamIds;
 
     private String description;
 

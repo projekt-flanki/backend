@@ -55,7 +55,7 @@ public class EventEndpoint {
 
     @PostMapping("join")
     public ResponseEntity<Void> joinEvent(@RequestBody @Valid final JoinEventDto joinEventDto) {
-        eventService.joinEvent(joinEventDto.getUuid());
+        eventService.joinEvent(joinEventDto.getEventId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
