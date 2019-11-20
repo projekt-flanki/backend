@@ -61,7 +61,7 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
         eventService.joinEvent(event.getId());
         //then
         final Event actualEvent = Iterables.getOnlyElement(eventService.getAllEvents());
-        assertThat(actualEvent.getParticipants()).contains(user);
+        assertThat(actualEvent.getFirstTeam()).contains(user);
     }
 
     @Test

@@ -34,7 +34,8 @@ public interface WithEventsData {
                 .location(generateRandomLocation())
                 .description(generateRandomString())
                 .owners(Collections.emptySet())
-                .participants(Collections.emptySet())
+                .firstTeam(Collections.emptySet())
+                .secondTeam(Collections.emptySet())
                 .build();
     }
 
@@ -51,7 +52,7 @@ public interface WithEventsData {
     }
 
     default Location generateRandomLocation(){
-        List<Double> twoDoubles = new Random().doubles(2).boxed().collect(Collectors.toList());
+        final List<Double> twoDoubles = new Random().doubles(2).boxed().collect(Collectors.toList());
         return Location.builder()
                 .latitude(twoDoubles.get(0))
                 .longitude(twoDoubles.get(1))

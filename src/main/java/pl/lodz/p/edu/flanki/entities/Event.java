@@ -54,5 +54,8 @@ public class Event {
     private Set<User> owners;
 
     @ManyToMany(targetEntity = User.class)
-    private Set<User> participants;
+    private Set<User> firstTeam;
+
+    @ManyToMany(targetEntity = User.class)
+    private Set<User> secondTeam;
 }

@@ -26,7 +26,11 @@ public class EventMapper {
                 .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
                 .orElse(new HashSet<>());
 
-        final Set<User> participants = Optional.ofNullable(eventDto.getParticipantIds())
+        final Set<User> firstTeam = Optional.ofNullable(eventDto.getFirstTeamIds())
+                .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
+                .orElse(new HashSet<>());
+
+        final Set<User> secondTeam = Optional.ofNullable(eventDto.getSecondTeamIds())
                 .map(ids -> new HashSet<>(userRepository.findAllById(ids)))
                 .orElse(new HashSet<>());
 
@@ -39,7 +43,8 @@ public class EventMapper {
                         .build())
                 .description(eventDto.getDescription())
                 .owners(owners)
-                .participants(participants)
+                .firstTeam(firstTeam)
+                .secondTeam(secondTeam)
                 .build();
     }
 
@@ -48,7 +53,11 @@ public class EventMapper {
                 .map(User::getId)
                 .collect(Collectors.toSet());
 
-        final Set<UUID> participantsIds = event.getParticipants().stream()
+        final Set<UUID> firstTeamIds = event.getFirstTeam().stream()
+                .map(User::getId)
+                .collect(Collectors.toSet());
+
+        final Set<UUID> secondTeamIds = event.getSecondTeam().stream()
                 .map(User::getId)
                 .collect(Collectors.toSet());
 
@@ -60,7 +69,8 @@ public class EventMapper {
                 .longitude(event.getLocation().getLongitude())
                 .name(event.getName())
                 .ownerIds(ownersIds)
-                .participantIds(participantsIds)
+                .firstTeamIds(firstTeamIds)
+                .secondTeamIds(secondTeamIds)
                 .build();
     }
 }
