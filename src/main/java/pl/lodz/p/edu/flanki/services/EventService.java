@@ -7,6 +7,7 @@ import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.dtos.EventResultDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
+import pl.lodz.p.edu.flanki.errors.NotAuthorizedTryOfFinalizingEventException;
 import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
@@ -108,17 +109,27 @@ public class EventService {
 
         final Event event = getEvent(eventResultDto.getEventId());
 
+        final User user = userService.getUser();
+        final Set<User> owners = event.getOwners();
+        if(!owners.contains(user)){
+            throw new NotAuthorizedTryOfFinalizingEventException(user, event);
+        }
+
         if(eventResultDto.getTeamNumber() == 0) {
             grantPointsToWinners(event.getFirstTeam());
         }
         else if (eventResultDto.getTeamNumber() == 1){
             grantPointsToWinners(event.getSecondTeam());
         }
+
+        eventRepository.save(event.toBuilder().finalized(true).build());
     }
 
-    private void grantPointsToWinners(Set<User> team) {
-        for(User member: team){
-            userRepository.save(member.toBuilder().points(member.getPoints() + 1).build());
-        }
+    private void grantPointsToWinners(final Set<User> members) {
+        members.forEach(
+                member -> userRepository.save(member.toBuilder()
+                                .points(member.getPoints() + 1)
+                                .build())
+        );
     }
 }
