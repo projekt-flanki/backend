@@ -34,7 +34,8 @@ public class EventService {
     @Autowired
     EventService(final EventRepository eventRepository,
                  final UserService userService,
-                 final EventMapper eventMapper, UserRepository userRepository) {
+                 final EventMapper eventMapper,
+                 final UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.eventMapper = eventMapper;
@@ -51,7 +52,8 @@ public class EventService {
         final Event newEvent = event.toBuilder()
                 .owners(Collections.singleton(user))
                 .build();
-        return eventRepository.save(newEvent);
+        final Event modifiedEvent = addUserToEvent(user, newEvent);
+        return eventRepository.save(modifiedEvent);
     }
 
     public List<Event> getMyEvents() {
@@ -74,7 +76,8 @@ public class EventService {
             throw new UserAlreadyRegisteredException("Użytkownik już dołączył do spotkania");
         }
 
-        addUserToEvent(user, event);
+        final Event modifiedEvent = addUserToEvent(user, event);
+        eventRepository.save(modifiedEvent);
     }
 
     private boolean doesUserParticipateInEvent(final User user, final Event event) {
@@ -83,7 +86,7 @@ public class EventService {
         return firstTeam.contains(user) || secondTeam.contains(user);
     }
 
-    private void addUserToEvent(final User user, final Event event) {
+    private Event addUserToEvent(final User user, final Event event) {
         final Set<User> firstTeam = Sets.newHashSet(event.getFirstTeam());
         final Set<User> secondTeam = Sets.newHashSet(event.getSecondTeam());
         if (firstTeam.size() <= secondTeam.size()) {
@@ -92,10 +95,10 @@ public class EventService {
             secondTeam.add(user);
         }
 
-        eventRepository.save(event.toBuilder()
+        return event.toBuilder()
                 .firstTeam(firstTeam)
                 .secondTeam(secondTeam)
-                .build());
+                .build();
     }
 
     public void editEvent(@Valid final EventDto eventDto) {
