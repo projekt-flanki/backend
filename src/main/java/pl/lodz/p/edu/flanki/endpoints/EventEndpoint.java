@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
+import pl.lodz.p.edu.flanki.dtos.EventResultDto;
 import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
@@ -71,6 +72,12 @@ public class EventEndpoint {
     @PutMapping("edit")
     public ResponseEntity<Void> editEvent(@RequestBody @Valid final EventDto eventDto) {
         eventService.editEvent(eventDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("finalize")
+    public ResponseEntity<Void> finalizeEvent(@RequestBody @Valid final EventResultDto eventResultDto) {
+        eventService.finalizeEvent(eventResultDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -4,12 +4,15 @@ import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
+import pl.lodz.p.edu.flanki.dtos.EventResultDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.repositories.EventRepository;
+import pl.lodz.p.edu.flanki.repositories.UserRepository;
+
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Collections;
@@ -25,15 +28,17 @@ public class EventService {
     private final EventRepository eventRepository;
     private final UserService userService;
     private final EventMapper eventMapper;
+    private final UserRepository userRepository;
 
 
     @Autowired
     EventService(final EventRepository eventRepository,
                  final UserService userService,
-                 final EventMapper eventMapper) {
+                 final EventMapper eventMapper, UserRepository userRepository) {
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.eventMapper = eventMapper;
+        this.userRepository = userRepository;
     }
 
     public Event getEvent(final UUID id) {
@@ -97,5 +102,23 @@ public class EventService {
         final Event editedEvent = eventMapper.toModel(eventDto);
         final Event eventToPersist = editedEvent.toBuilder().id(eventDto.getId()).build();
         eventRepository.save(eventToPersist);
+    }
+
+    public void finalizeEvent(final EventResultDto eventResultDto) {
+
+        final Event event = getEvent(eventResultDto.getEventId());
+
+        if(eventResultDto.getTeamNumber() == 0) {
+            grantPointsToWinners(event.getFirstTeam());
+        }
+        else if (eventResultDto.getTeamNumber() == 1){
+            grantPointsToWinners(event.getSecondTeam());
+        }
+    }
+
+    private void grantPointsToWinners(Set<User> team) {
+        for(User member: team){
+            userRepository.save(member.toBuilder().points(member.getPoints() + 1).build());
+        }
     }
 }
