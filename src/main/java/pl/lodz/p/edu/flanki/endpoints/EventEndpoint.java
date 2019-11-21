@@ -51,6 +51,7 @@ public class EventEndpoint {
     public ResponseEntity<Collection<EventDto>> getAllEvents() {
         final List<EventDto> events = eventService.getAllEvents()
                 .stream()
+                .filter(event -> !event.isFinalized())
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(events, HttpStatus.OK);

@@ -45,6 +45,7 @@ public class EventMapper {
                 .owners(owners)
                 .firstTeam(firstTeam)
                 .secondTeam(secondTeam)
+                .finalized(false)
                 .build();
     }
 

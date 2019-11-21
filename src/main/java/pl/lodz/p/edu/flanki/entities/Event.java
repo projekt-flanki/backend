@@ -58,4 +58,8 @@ public class Event {
 
     @ManyToMany(targetEntity = User.class)
     private Set<User> secondTeam;
+
+    @Column(name = "finalized")
+    private boolean finalized;
+
 }
