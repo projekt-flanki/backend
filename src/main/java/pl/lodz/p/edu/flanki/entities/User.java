@@ -57,4 +57,7 @@ public class User {
     @Range(min = 1, max = 5)
     private double rating;
 
+    @Column(name = "points")
+    private int points;
+
 }

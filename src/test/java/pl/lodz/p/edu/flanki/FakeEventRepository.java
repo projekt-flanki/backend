@@ -23,7 +23,7 @@ public class FakeEventRepository implements EventRepository {
 
     @Override
     public UUID save(final Event event) {
-        final UUID id = UUID.randomUUID();
+        final UUID id = event.getId() != null ? event.getId() : UUID.randomUUID();
         events.put(id, event.toBuilder().id(id).build());
         return id;
     }

@@ -2,6 +2,7 @@ package pl.lodz.p.edu.flanki;
 
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,22 @@ public class FakeUserRepository implements UserRepository {
     public List<User> findAllById(final Iterable<UUID> ids) {
         return StreamSupport.stream(ids.spliterator(), false)
                 .map(users::get)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> findAllByOrderByPointsDesc() {
+        return users.values()
+                .stream()
+                .sorted(Comparator.comparingInt(User::getPoints))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> findAllByOrderByRatingDesc() {
+        return users.values()
+                .stream()
+                .sorted(Comparator.comparingInt(User::getPoints).reversed())
                 .collect(Collectors.toList());
     }
 }

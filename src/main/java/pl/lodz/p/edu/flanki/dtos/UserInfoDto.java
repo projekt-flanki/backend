@@ -22,4 +22,6 @@ public class UserInfoDto {
 
     @Range(min = 1, max = 5)
     private double rating;
+
+    private int points;
 }

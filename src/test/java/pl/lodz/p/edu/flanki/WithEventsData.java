@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,6 +37,22 @@ public interface WithEventsData {
                 .owners(Collections.emptySet())
                 .firstTeam(Collections.emptySet())
                 .secondTeam(Collections.emptySet())
+                .build();
+    }
+
+    default Event getExampleEventWithGivenSizesOfTeams(final int firstTeamSize, final int secondTeamSize){
+        final Set<User> firstTeam = IntStream.range(0, firstTeamSize).mapToObj(i -> User.builder().id(UUID.randomUUID()).build()).collect(Collectors.toSet());
+        final Set<User> secondTeam = IntStream.range(0, secondTeamSize).mapToObj(i -> User.builder().id(UUID.randomUUID()).build()).collect(Collectors.toSet());
+        return Event
+                .builder()
+                .id(UUID.randomUUID())
+                .name(generateRandomString())
+                .date(Instant.now())
+                .location(generateRandomLocation())
+                .description(generateRandomString())
+                .owners(Collections.emptySet())
+                .firstTeam(firstTeam)
+                .secondTeam(secondTeam)
                 .build();
     }
 

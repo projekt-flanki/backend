@@ -14,6 +14,7 @@ public class UserInfoMapper {
                 .username(user.getUsername())
                 .profileImageBase64(user.getProfileImageBase64())
                 .rating(user.getRating())
+                .points(user.getPoints())
                 .build();
     }
 }

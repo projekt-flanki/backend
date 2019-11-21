@@ -12,4 +12,8 @@ public interface UserRepository {
     UUID save(User user);
 
     List<User> findAllById(Iterable<UUID> ids);
+
+    List<User> findAllByOrderByPointsDesc();
+
+    List<User> findAllByOrderByRatingDesc();
 }
