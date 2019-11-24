@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.dtos.EventResultDto;
 import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
+import pl.lodz.p.edu.flanki.dtos.EventWithUsersDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.services.EventService;
@@ -64,9 +65,9 @@ public class EventEndpoint {
     }
 
     @GetMapping("{eventId}")
-    public ResponseEntity<EventDto> getEvent(@PathVariable final UUID eventId) {
+    public ResponseEntity<EventWithUsersDto> getEvent(@PathVariable final UUID eventId) {
         final Event event = eventService.getEvent(eventId);
-        final EventDto eventDto = eventMapper.toDto(event);
+        final EventWithUsersDto eventDto = eventMapper.toDtoWithUsers(event);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
 

@@ -2,6 +2,9 @@ package pl.lodz.p.edu.flanki.mappers;
 
 import org.springframework.stereotype.Component;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
+import pl.lodz.p.edu.flanki.dtos.EventWithUsersDto;
+import pl.lodz.p.edu.flanki.dtos.UserInfoDto;
+import pl.lodz.p.edu.flanki.dtos.UserInfoWithoutImageDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.Location;
 import pl.lodz.p.edu.flanki.entities.User;
@@ -72,6 +75,46 @@ public class EventMapper {
                 .ownerIds(ownersIds)
                 .firstTeamIds(firstTeamIds)
                 .secondTeamIds(secondTeamIds)
+                .build();
+    }
+
+    public EventWithUsersDto toDtoWithUsers(final Event event){
+        final Set<UserInfoWithoutImageDto> owners = event.getOwners()
+                .stream()
+                .map(this::userInfoWithoutImage)
+                .collect(Collectors.toSet());
+
+        final Set<UserInfoWithoutImageDto> firstTeam = event.getFirstTeam()
+                .stream()
+                .map(this::userInfoWithoutImage)
+                .collect(Collectors.toSet());
+
+        final Set<UserInfoWithoutImageDto> secondTeam = event.getSecondTeam()
+                .stream()
+                .map(this::userInfoWithoutImage)
+                .collect(Collectors.toSet());
+
+
+        return EventWithUsersDto.builder()
+                .id(event.getId())
+                .date(event.getDate())
+                .description(event.getDescription())
+                .latitude(event.getLocation().getLatitude())
+                .longitude(event.getLocation().getLongitude())
+                .name(event.getName())
+                .owners(owners)
+                .firstTeam(firstTeam)
+                .secondTeam(secondTeam)
+                .build();
+    }
+
+    private UserInfoWithoutImageDto userInfoWithoutImage(final User user) {
+        return UserInfoWithoutImageDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .points(user.getPoints())
+                .username(user.getUsername())
+                .rating(user.getRating())
                 .build();
     }
 }
