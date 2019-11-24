@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-public class JoinEventDto {
+public class SubscriptionEventDto {
 
     @NotNull
     private UUID eventId;

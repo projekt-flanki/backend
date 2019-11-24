@@ -111,14 +111,13 @@ public class EventService {
 
         final User user = userService.getUser();
         final Set<User> owners = event.getOwners();
-        if(!owners.contains(user)){
+        if (!owners.contains(user)) {
             throw new NotAuthorizedTryOfFinalizingEventException(user, event);
         }
 
-        if(eventResultDto.getTeamNumber() == 0) {
+        if (eventResultDto.getTeamNumber() == 0) {
             grantPointsToWinners(event.getFirstTeam());
-        }
-        else if (eventResultDto.getTeamNumber() == 1){
+        } else if (eventResultDto.getTeamNumber() == 1) {
             grantPointsToWinners(event.getSecondTeam());
         }
 
@@ -128,8 +127,21 @@ public class EventService {
     private void grantPointsToWinners(final Set<User> members) {
         members.forEach(
                 member -> userRepository.save(member.toBuilder()
-                                .points(member.getPoints() + 1)
-                                .build())
+                        .points(member.getPoints() + 1)
+                        .build())
         );
+    }
+
+    public void unsubscribeEvent(UUID eventId) {
+
+        final Event event = getEvent(eventId);
+        final User user = userService.getUser();
+
+        if (event.getFirstTeam().contains(user)) {
+            event.getFirstTeam().remove(user);
+        } else {
+            event.getSecondTeam().remove(user);
+        }
+        eventRepository.save(event);
     }
 }
