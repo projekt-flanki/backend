@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.dtos.EventResultDto;
-import pl.lodz.p.edu.flanki.dtos.JoinEventDto;
+import pl.lodz.p.edu.flanki.dtos.SubscriptionEventDto;
 import pl.lodz.p.edu.flanki.dtos.EventWithUsersDto;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
@@ -59,8 +59,14 @@ public class EventEndpoint {
     }
 
     @PostMapping("join")
-    public ResponseEntity<Void> joinEvent(@RequestBody @Valid final JoinEventDto joinEventDto) {
-        eventService.joinEvent(joinEventDto.getEventId());
+    public ResponseEntity<Void> joinEvent(@RequestBody @Valid final SubscriptionEventDto subscriptionEventDto) {
+        eventService.joinEvent(subscriptionEventDto.getEventId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("unsubscribe")
+    public ResponseEntity<Void> unsubscribeEvent(@RequestBody @Valid final SubscriptionEventDto subscriptionEventDto) {
+        eventService.unsubscribeEvent(subscriptionEventDto.getEventId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
