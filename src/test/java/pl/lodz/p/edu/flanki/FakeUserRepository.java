@@ -30,6 +30,11 @@ public class FakeUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUuid(UUID uuid) {
+        return Optional.empty();
+    }
+
+    @Override
     public UUID save(final User user) {
         final UUID id = UUID.randomUUID();
         users.put(id, user);

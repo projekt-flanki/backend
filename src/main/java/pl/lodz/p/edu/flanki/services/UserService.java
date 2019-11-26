@@ -11,8 +11,8 @@ import pl.lodz.p.edu.flanki.mappers.UserInfoMapper;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,11 @@ public class UserService {
     public User getUser() {
         final UserPrinciple userPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByEmail(userPrinciple.getEmail()).orElseThrow(() ->
+                new UserNotExistException("Użytkownik nie istnieje."));
+    }
+
+    public User getUserByUuid(UUID uuid) {
+        return userRepository.findByUuid(uuid).orElseThrow(() ->
                 new UserNotExistException("Użytkownik nie istnieje."));
     }
 
@@ -73,4 +78,6 @@ public class UserService {
                 .map(user -> userInfoMapper.toDto(user))
                 .collect(Collectors.toList());
     }
+
+
 }
