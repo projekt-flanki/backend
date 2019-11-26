@@ -19,6 +19,11 @@ public class UsersStorage implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUuid(UUID uuid) {
+        return jpaUserRepository.findById(uuid);
+    }
+
+    @Override
     public UUID save(final User user) {
         return jpaUserRepository.save(user).getId();
     }

@@ -9,6 +9,8 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByUuid(UUID uuid);
+
     UUID save(User user);
 
     List<User> findAllById(Iterable<UUID> ids);
