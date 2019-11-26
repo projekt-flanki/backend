@@ -9,6 +9,7 @@ import pl.lodz.p.edu.flanki.mappers.UserInfoMapper;
 import pl.lodz.p.edu.flanki.services.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,6 +28,12 @@ public class UserDataEndpoint {
     @GetMapping("info")
     public ResponseEntity<UserInfoDto> getUserInfo() {
         final UserInfoDto userInfo = userInfoMapper.toDto(userService.getUser());
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @GetMapping("get/{uuid}")
+    public ResponseEntity<UserInfoDto> getUserInfo(@PathVariable UUID uuid) {
+        final UserInfoDto userInfo = userInfoMapper.toDto(userService.getUserByUuid(uuid));
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
