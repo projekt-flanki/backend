@@ -8,10 +8,7 @@ import pl.lodz.p.edu.flanki.dtos.EventResultDto;
 import pl.lodz.p.edu.flanki.dtos.ResultOfEvent;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
-import pl.lodz.p.edu.flanki.errors.NotAuthorizedTryOfFinalizingEventException;
-import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
-import pl.lodz.p.edu.flanki.errors.NotResultOfEventProvidedException;
-import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
+import pl.lodz.p.edu.flanki.errors.*;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.repositories.EventRepository;
 import pl.lodz.p.edu.flanki.repositories.UserRepository;
@@ -76,7 +73,9 @@ public class EventService {
         if (doesUserParticipateInEvent(user, event)) {
             throw new UserAlreadyRegisteredException("Użytkownik już dołączył do spotkania");
         }
-
+        if(event.isFinalized()){
+            throw new EventFinalizedException("Event został zakończony");
+        }
         addUserToEvent(user, event);
     }
 
