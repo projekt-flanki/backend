@@ -37,4 +37,7 @@ public class EventWithUsersDto {
 
     private String description;
 
+    @Builder.Default
+    private ResultOfEvent result = ResultOfEvent.NOT_RESOLVED;
+
 }
