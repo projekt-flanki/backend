@@ -1,7 +1,6 @@
 package pl.lodz.p.edu.flanki.dtos;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.NonNull;
 import lombok.Value;
 import org.hibernate.validator.constraints.Range;

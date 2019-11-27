@@ -14,6 +14,7 @@ import pl.lodz.p.edu.flanki.FakeEventRepository;
 import pl.lodz.p.edu.flanki.FakeUserRepository;
 import pl.lodz.p.edu.flanki.WithEventsData;
 import pl.lodz.p.edu.flanki.WithUsersData;
+import pl.lodz.p.edu.flanki.dtos.ResultOfEvent;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData {
+class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData, WithTestEventResultDto {
 
     private final FakeEventRepository eventRepository = new FakeEventRepository();
     private final FakeUserRepository userRepository = new FakeUserRepository();
@@ -116,6 +117,21 @@ class EventServiceTest implements WithAssertions, WithEventsData, WithUsersData 
                 Arguments.of(thirdEvent, 2, 1),
                 Arguments.of(fourthEvent, 1, 1)
         );
+    }
+
+    @Test
+    void shouldBeAbleToFinalizeEvent(){
+        //given
+        final User user = thereIsAnUser();
+        final Event event = getExampleEventWithOwner(user);
+        thereIsAnEventInRepository(event);
+        //when
+        eventService.finalizeEvent(firstTeamWin(event.getId()));
+
+        //then
+        final Event finalizedEvent = eventService.getEvent(event.getId());
+        assertThat(ResultOfEvent.FIRST_TEAM_WON).isEqualTo(finalizedEvent.getResult());
+
     }
 
     private void thereAreEventsInRepository(final List<Event> events) {

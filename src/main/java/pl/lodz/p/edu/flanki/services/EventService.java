@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.edu.flanki.dtos.EventDto;
 import pl.lodz.p.edu.flanki.dtos.EventResultDto;
+import pl.lodz.p.edu.flanki.dtos.ResultOfEvent;
 import pl.lodz.p.edu.flanki.entities.Event;
 import pl.lodz.p.edu.flanki.entities.User;
 import pl.lodz.p.edu.flanki.errors.NotAuthorizedTryOfFinalizingEventException;
 import pl.lodz.p.edu.flanki.errors.NotEventsFoundException;
+import pl.lodz.p.edu.flanki.errors.NotResultOfEventProvidedException;
 import pl.lodz.p.edu.flanki.errors.UserAlreadyRegisteredException;
 import pl.lodz.p.edu.flanki.mappers.EventMapper;
 import pl.lodz.p.edu.flanki.repositories.EventRepository;
@@ -115,13 +117,21 @@ public class EventService {
             throw new NotAuthorizedTryOfFinalizingEventException(user, event);
         }
 
+        final ResultOfEvent resultOfEvent;
         if (eventResultDto.getTeamNumber() == 0) {
+            resultOfEvent = ResultOfEvent.FIRST_TEAM_WON;
             grantPointsToWinners(event.getFirstTeam());
         } else if (eventResultDto.getTeamNumber() == 1) {
+            resultOfEvent = ResultOfEvent.SECOND_TEAM_WON;
             grantPointsToWinners(event.getSecondTeam());
+        }else {
+            throw new NotResultOfEventProvidedException(eventResultDto);
         }
 
-        eventRepository.save(event.toBuilder().finalized(true).build());
+        eventRepository.save(event.toBuilder()
+                .result(resultOfEvent)
+                .finalized(true)
+                .build());
     }
 
     private void grantPointsToWinners(final Set<User> members) {
@@ -132,7 +142,7 @@ public class EventService {
         );
     }
 
-    public void unsubscribeEvent(UUID eventId) {
+    public void unsubscribeEvent(final UUID eventId) {
 
         final Event event = getEvent(eventId);
         final User user = userService.getUser();

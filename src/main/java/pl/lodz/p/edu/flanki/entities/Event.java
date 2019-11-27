@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
+import pl.lodz.p.edu.flanki.dtos.ResultOfEvent;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,5 +62,8 @@ public class Event {
 
     @Column(name = "finalized")
     private boolean finalized;
+
+    @Column(name = "result")
+    private ResultOfEvent result;
 
 }
